@@ -1,4 +1,4 @@
-import { UserData, InvestmentAllocation } from "@/types/finance";
+import { UserData, InvestmentAllocation, GoalInvestmentPlan } from "@/types/finance";
 
 export function getInvestmentAllocations(userData: UserData): InvestmentAllocation[] {
   const { savings, riskLevel } = userData;
@@ -74,5 +74,88 @@ export function getAITips(userData: UserData): string[] {
   tips.push("🛡️ Build an emergency fund of 3–6 months of expenses before investing aggressively.");
   if (savings > 10000) tips.push("🏠 Consider a goal-based investment plan for major purchases like a home or car.");
   tips.push("📱 Track every expense — even small amounts add up to big savings over time.");
+  return tips.slice(0, 4);
+}
+
+export function getGoalInvestmentPlan(
+  monthlySavings: number,
+  targetAmount: number,
+  timeMonths: number,
+  riskLevel: 'low' | 'medium' | 'high'
+): GoalInvestmentPlan {
+  const monthlySaving = targetAmount / timeMonths;
+  const weeklySaving = monthlySaving / 4.33;
+
+  let term: 'short' | 'medium' | 'long';
+  if (timeMonths <= 3) term = 'short';
+  else if (timeMonths <= 12) term = 'medium';
+  else term = 'long';
+
+  const canAfford = monthlySavings >= monthlySaving;
+
+  let allocations: GoalInvestmentPlan['allocations'] = [];
+  let explanation = '';
+
+  if (term === 'short') {
+    allocations = [
+      { label: "Liquid Mutual Fund", percentage: 40, type: 'short', color: "#a78bfa", icon: "📈" },
+      { label: "Recurring Deposit", percentage: 30, type: 'short', color: "#22d3ee", icon: "🏦" },
+      { label: "Gold Savings", percentage: 20, type: 'short', color: "#facc15", icon: "🥇" },
+      { label: "Emergency Cash", percentage: 10, type: 'short', color: "#4ade80", icon: "💵" },
+    ];
+    explanation = `Based on your ${timeMonths}-month goal, low-risk and liquid investments are recommended. Liquid Mutual Funds and Recurring Deposits ensure quick access to funds while earning returns.${!canAfford ? " ⚠️ Your current savings may be insufficient — consider reducing expenses to boost monthly savings." : " ✅ Your savings can comfortably support this goal."}`;
+  } else if (term === 'medium') {
+    if (riskLevel === 'low') {
+      allocations = [
+        { label: "Mutual Funds (SIP)", percentage: 35, type: 'medium', color: "#a78bfa", icon: "📈" },
+        { label: "Gold Savings", percentage: 30, type: 'medium', color: "#facc15", icon: "🥇" },
+        { label: "Fixed Deposit", percentage: 25, type: 'medium', color: "#22d3ee", icon: "🏦" },
+        { label: "Savings Account", percentage: 10, type: 'medium', color: "#4ade80", icon: "💰" },
+      ];
+    } else {
+      allocations = [
+        { label: "Mutual Funds (SIP)", percentage: 50, type: 'medium', color: "#a78bfa", icon: "📈" },
+        { label: "Gold Savings", percentage: 25, type: 'medium', color: "#facc15", icon: "🥇" },
+        { label: "Stocks (Blue-chip)", percentage: 15, type: 'medium', color: "#f97316", icon: "📊" },
+        { label: "Fixed Deposit", percentage: 10, type: 'medium', color: "#22d3ee", icon: "🏦" },
+      ];
+    }
+    explanation = `For your ${timeMonths}-month goal, a balanced mix of Mutual Fund SIPs and Gold provides steady growth with moderate risk. Regular SIP contributions will compound your savings effectively.${!canAfford ? " ⚠️ Consider increasing monthly savings to stay on track." : " ✅ You're on a great track to hit this goal!"}`;
+  } else {
+    if (riskLevel === 'high') {
+      allocations = [
+        { label: "Stocks", percentage: 40, type: 'long', color: "#f97316", icon: "📊" },
+        { label: "Mutual Funds (SIP)", percentage: 35, type: 'long', color: "#a78bfa", icon: "📈" },
+        { label: "Gold Investment", percentage: 15, type: 'long', color: "#facc15", icon: "🥇" },
+        { label: "Fixed Deposit", percentage: 10, type: 'long', color: "#22d3ee", icon: "🏦" },
+      ];
+    } else {
+      allocations = [
+        { label: "Mutual Funds (SIP)", percentage: 45, type: 'long', color: "#a78bfa", icon: "📈" },
+        { label: "Fixed Deposit", percentage: 25, type: 'long', color: "#22d3ee", icon: "🏦" },
+        { label: "Gold Investment", percentage: 20, type: 'long', color: "#facc15", icon: "🥇" },
+        { label: "Stocks (Blue-chip)", percentage: 10, type: 'long', color: "#f97316", icon: "📊" },
+      ];
+    }
+    explanation = `With a ${timeMonths}-month horizon, you can leverage the power of compounding through long-term Mutual Fund SIPs and equity investments. Time in the market beats timing the market!${!canAfford ? " ⚠️ Start small, increase contributions as income grows." : " ✅ Excellent position to build significant wealth!"}`;
+  }
+
+  return { allocations, explanation, monthlySaving, weeklySaving, term };
+}
+
+export function getGoalTips(monthlySavings: number, monthlySaving: number, targetAmount: number): string[] {
+  const tips: string[] = [];
+  const gap = monthlySaving - monthlySavings;
+
+  if (gap > 0) {
+    tips.push(`💸 You need ₹${Math.round(gap).toLocaleString('en-IN')} more per month. Try reducing dining out and subscriptions.`);
+    tips.push("🔄 Consider a part-time gig or freelance work to boost income temporarily.");
+  }
+  tips.push("📅 Set up an auto-debit on salary day so savings happen before spending.");
+  tips.push("📉 Review and cancel unused subscriptions — even ₹500/month adds up to ₹6,000/year.");
+  tips.push("🎯 Split your goal into weekly milestones to stay motivated and track progress easily.");
+  if (targetAmount > 50000) {
+    tips.push("🏦 Open a dedicated savings account for this goal to avoid mixing funds.");
+  }
   return tips.slice(0, 4);
 }
