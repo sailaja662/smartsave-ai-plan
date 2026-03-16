@@ -6,6 +6,7 @@ import { GoldETF } from "@/components/markets/GoldETF";
 import { StockMarket } from "@/components/markets/StockMarket";
 import { FixedDeposits } from "@/components/markets/FixedDeposits";
 import { formatINR } from "@/lib/financeUtils";
+import { ExternalLink, Info } from "lucide-react";
 
 interface Props {
   userData: UserData;
@@ -14,7 +15,7 @@ interface Props {
 const MARKET_TABS = [
   { id: "mf", label: "📈 Mutual Funds", desc: "Top-rated funds from leading AMCs" },
   { id: "gold", label: "🪙 Gold ETFs", desc: "Gold investment options" },
-  { id: "stocks", label: "📊 Stocks", desc: "NSE/BSE listed equities" },
+  { id: "stocks", label: "📊 Stocks", desc: "NSE/BSE & Global equities" },
   { id: "fd", label: "🏦 Fixed Deposits", desc: "Bank FD rates & calculator" },
 ];
 
@@ -100,6 +101,20 @@ export function MarketData({ userData }: Props) {
         {tab === "gold" && <GoldETF />}
         {tab === "stocks" && <StockMarket />}
         {tab === "fd" && <FixedDeposits />}
+      </motion.div>
+
+      {/* Disclaimer Footer */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="glass-card p-4 border border-yellow-warn/20 flex items-start gap-3"
+      >
+        <Info size={16} className="text-yellow-warn flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          <span className="font-semibold text-foreground">Disclaimer: </span>
+          SmartSave AI provides financial insights and suggestions only. All investments are completed on official financial platforms. Mutual fund investments are subject to market risks — please read all scheme-related documents carefully before investing. Fixed deposit rates may vary; check with your bank for the latest rates.
+        </p>
       </motion.div>
     </section>
   );

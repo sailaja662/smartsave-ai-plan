@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingUp } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 const GOLD_ETFS = [
   { name: "SBI Gold ETF", type: "ETF", price: 5842, change: 0.32, return1y: 14.2, return3y: 11.8, expense: "0.50%", exchange: "NSE/BSE", minQty: "1 unit", house: "SBI MF" },
@@ -11,6 +11,12 @@ const GOLD_ETFS = [
   { name: "SBI Gold Fund (FoF)", type: "Fund", price: 23.41, change: 0.27, return1y: 13.9, return3y: 11.4, expense: "0.65%", exchange: "Direct/Regular", minQty: "₹500 SIP", house: "SBI MF" },
   { name: "HDFC Gold Fund (FoF)", type: "Fund", price: 24.12, change: 0.26, return1y: 14.1, return3y: 11.7, expense: "0.59%", exchange: "Direct/Regular", minQty: "₹500 SIP", house: "HDFC MF" },
   { name: "Sovereign Gold Bond (SGB) 2025", type: "SGB", price: 9142, change: 0.34, return1y: 14.8, return3y: 12.4, expense: "Nil", exchange: "NSE/BSE", minQty: "1 gram", house: "RBI Issued" },
+];
+
+const GOLD_INVEST_LINKS = [
+  { name: "Paytm Digital Gold", url: "https://paytm.com/digital-gold", color: "#00b9f1", icon: "💙" },
+  { name: "PhonePe Gold", url: "https://www.phonepe.com/gold", color: "#6739b7", icon: "💜" },
+  { name: "Groww Gold ETF", url: "https://groww.in", color: "#00d09c", icon: "🌱" },
 ];
 
 const TYPE_CONFIG: Record<string, { color: string; bg: string }> = {
@@ -33,6 +39,7 @@ export function GoldETF() {
           <p className="text-xs font-semibold opacity-80" style={{ color: "hsl(var(--primary-foreground))" }}>🪙 24K Gold (MCX Spot)</p>
           <p className="text-3xl font-black" style={{ color: "hsl(var(--primary-foreground))" }}>₹73,450 <span className="text-base font-semibold opacity-80">/ 10g</span></p>
           <p className="text-xs mt-1 opacity-80" style={{ color: "hsl(var(--primary-foreground))" }}>+₹234 (+0.32%) today</p>
+          <p className="text-xs mt-1 font-semibold opacity-90" style={{ color: "hsl(var(--primary-foreground))" }}>💡 Gold is a stable long-term investment — ideal as 10–20% of your portfolio.</p>
         </div>
         <div className="grid grid-cols-3 gap-4 text-center">
           {[{ label: "1Y Return", val: "+14.2%" }, { label: "3Y Return", val: "+11.8%" }, { label: "5Y Return", val: "+13.5%" }].map(({ label, val }) => (
@@ -60,6 +67,31 @@ export function GoldETF() {
           </div>
         ))}
       </div>
+
+      {/* Invest in Gold - Official Platforms */}
+      <motion.div
+        initial={{ opacity: 0, y: -6 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card p-4 border border-yellow-warn/20"
+      >
+        <p className="text-xs font-semibold text-muted-foreground mb-3">🪙 Buy Digital Gold & Gold ETFs on official platforms:</p>
+        <div className="flex flex-wrap gap-3">
+          {GOLD_INVEST_LINKS.map(p => (
+            <a
+              key={p.name}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 hover:shadow-md"
+              style={{ background: `${p.color}18`, color: p.color, border: `1.5px solid ${p.color}40` }}
+            >
+              <span>{p.icon}</span>
+              {p.name}
+              <ExternalLink size={11} />
+            </a>
+          ))}
+        </div>
+      </motion.div>
 
       {/* ETF Table Desktop */}
       <div className="hidden md:block overflow-x-auto">
@@ -100,7 +132,15 @@ export function GoldETF() {
                 <td className="py-3 text-right text-muted-foreground">{g.expense}</td>
                 <td className="py-3 text-right text-muted-foreground text-xs">{g.minQty}</td>
                 <td className="py-3 text-right">
-                  <button className="text-xs px-3 py-1.5 rounded-lg font-semibold hover:opacity-90 transition-all" style={{ background: "hsl(var(--gold))", color: "#fff" }}>Buy</button>
+                  <a
+                    href="https://groww.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs px-3 py-1.5 rounded-lg font-semibold hover:opacity-90 transition-all inline-flex items-center gap-1"
+                    style={{ background: "hsl(var(--gold, 45 90% 52%))", color: "#fff" }}
+                  >
+                    Buy <ExternalLink size={10} />
+                  </a>
                 </td>
               </motion.tr>
             ))}
@@ -135,7 +175,15 @@ export function GoldETF() {
             </div>
             <div className="flex justify-between items-center">
               <p className="text-xs text-muted-foreground">Min: {g.minQty}</p>
-              <button className="text-xs px-3 py-1.5 rounded-lg font-semibold" style={{ background: "hsl(var(--gold))", color: "#fff" }}>Buy</button>
+              <a
+                href="https://groww.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs px-3 py-1.5 rounded-lg font-semibold inline-flex items-center gap-1"
+                style={{ background: "hsl(45, 90%, 52%)", color: "#fff" }}
+              >
+                Buy <ExternalLink size={10} />
+              </a>
             </div>
           </motion.div>
         ))}
