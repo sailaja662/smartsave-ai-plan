@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { ExternalLink } from "lucide-react";
 
 const FD_DATA = [
   {
-    bank: "SBI", logo: "🏛️", color: "#2563eb",
+    bank: "SBI", logo: "🏛️", color: "#2563eb", url: "https://sbi.co.in",
+    bestRate: "7.10%", seniorRate: "7.60%",
     rates: [
       { tenure: "7–45 days", general: "3.50%", senior: "4.00%" },
       { tenure: "46–179 days", general: "5.50%", senior: "6.00%" },
@@ -12,13 +14,13 @@ const FD_DATA = [
       { tenure: "2–3 years", general: "7.00%", senior: "7.50%" },
       { tenure: "3–5 years", general: "6.75%", senior: "7.25%" },
       { tenure: "5–10 years", general: "6.50%", senior: "7.50%" },
-    ]
+    ],
   },
   {
-    bank: "HDFC Bank", logo: "🔵", color: "#22d3ee",
+    bank: "HDFC Bank", logo: "🔵", color: "#22d3ee", url: "https://hdfcbank.com",
+    bestRate: "7.25%", seniorRate: "7.75%",
     rates: [
       { tenure: "7–14 days", general: "3.00%", senior: "3.50%" },
-      { tenure: "15–29 days", general: "3.00%", senior: "3.50%" },
       { tenure: "30–90 days", general: "4.50%", senior: "5.00%" },
       { tenure: "91–180 days", general: "4.50%", senior: "5.00%" },
       { tenure: "6 months–1 year", general: "6.60%", senior: "7.10%" },
@@ -26,10 +28,11 @@ const FD_DATA = [
       { tenure: "2–3 years", general: "7.25%", senior: "7.75%" },
       { tenure: "3–5 years", general: "7.15%", senior: "7.65%" },
       { tenure: "5–10 years", general: "7.00%", senior: "7.75%" },
-    ]
+    ],
   },
   {
-    bank: "ICICI Bank", logo: "🟠", color: "#f97316",
+    bank: "ICICI Bank", logo: "🟠", color: "#f97316", url: "https://icicibank.com",
+    bestRate: "7.20%", seniorRate: "7.70%",
     rates: [
       { tenure: "7–14 days", general: "3.00%", senior: "3.50%" },
       { tenure: "3–6 months", general: "4.75%", senior: "5.25%" },
@@ -38,10 +41,11 @@ const FD_DATA = [
       { tenure: "2–3 years", general: "7.20%", senior: "7.70%" },
       { tenure: "3–5 years", general: "7.10%", senior: "7.60%" },
       { tenure: "5–10 years", general: "7.00%", senior: "7.50%" },
-    ]
+    ],
   },
   {
-    bank: "Axis Bank", logo: "🔴", color: "#ef4444",
+    bank: "Axis Bank", logo: "🔴", color: "#ef4444", url: "https://axisbank.com",
+    bestRate: "7.25%", seniorRate: "7.90%",
     rates: [
       { tenure: "7–14 days", general: "3.00%", senior: "3.50%" },
       { tenure: "3–6 months", general: "4.75%", senior: "5.25%" },
@@ -50,10 +54,11 @@ const FD_DATA = [
       { tenure: "2–3 years", general: "7.25%", senior: "7.90%" },
       { tenure: "3–5 years", general: "7.25%", senior: "7.90%" },
       { tenure: "5–10 years", general: "7.10%", senior: "7.75%" },
-    ]
+    ],
   },
   {
-    bank: "Kotak Mahindra", logo: "🔶", color: "#facc15",
+    bank: "Kotak Mahindra", logo: "🔶", color: "#facc15", url: "https://kotak.com",
+    bestRate: "7.25%", seniorRate: "7.75%",
     rates: [
       { tenure: "7–14 days", general: "2.75%", senior: "3.25%" },
       { tenure: "3–6 months", general: "4.50%", senior: "5.00%" },
@@ -62,7 +67,7 @@ const FD_DATA = [
       { tenure: "2–3 years", general: "7.25%", senior: "7.75%" },
       { tenure: "3–5 years", general: "7.10%", senior: "7.60%" },
       { tenure: "5+ years", general: "6.90%", senior: "7.40%" },
-    ]
+    ],
   },
 ];
 
@@ -73,13 +78,12 @@ export function FixedDeposits() {
 
   const selectedBank = FD_DATA.find(b => b.bank === selected)!;
 
-  const maturitySimple = calc.principal * (1 + (calc.rate / 100) * calc.years);
   const maturityCompound = calc.principal * Math.pow(1 + calc.rate / 100 / 4, 4 * calc.years);
   const interestEarned = maturityCompound - calc.principal;
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Best Rates Summary */}
+      {/* Quick Comparison Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {FD_DATA.map((b, i) => (
           <motion.button
@@ -92,10 +96,10 @@ export function FixedDeposits() {
           >
             <span className="text-2xl">{b.logo}</span>
             <p className="text-xs font-bold text-foreground mt-1">{b.bank}</p>
-            <p className="text-xs font-black" style={{ color: b.color }}>
-              {b.rates.find(r => r.tenure.includes("2–3"))?.general || "7%"}
+            <p className="text-sm font-black" style={{ color: b.color }}>
+              {isSenior ? b.seniorRate : b.bestRate}
             </p>
-            <p className="text-[10px] text-muted-foreground">2-3yr rate</p>
+            <p className="text-[10px] text-muted-foreground">best rate p.a.</p>
           </motion.button>
         ))}
       </div>
@@ -103,14 +107,28 @@ export function FixedDeposits() {
       {/* Rate Table */}
       <div className="glass-card p-5">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-          <h3 className="font-bold text-foreground">{selectedBank.logo} {selectedBank.bank} — FD Rates</h3>
-          <button
-            onClick={() => setIsSenior(!isSenior)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-all ${isSenior ? "border-primary gradient-primary" : "border-border bg-secondary text-muted-foreground"}`}
-            style={isSenior ? { color: "hsl(var(--primary-foreground))" } : {}}
-          >
-            👴 Senior Citizen Rates {isSenior ? "(+0.50%)" : ""}
-          </button>
+          <div>
+            <h3 className="font-bold text-foreground">{selectedBank.logo} {selectedBank.bank} — FD Rates</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Official rates from the bank's website</p>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <button
+              onClick={() => setIsSenior(!isSenior)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-all ${isSenior ? "border-primary gradient-primary" : "border-border bg-secondary text-muted-foreground"}`}
+              style={isSenior ? { color: "hsl(var(--primary-foreground))" } : {}}
+            >
+              👴 Senior Citizen Rates {isSenior ? "(+0.50%)" : ""}
+            </button>
+            <a
+              href={selectedBank.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:scale-105"
+              style={{ background: `${selectedBank.color}18`, color: selectedBank.color, border: `1.5px solid ${selectedBank.color}40` }}
+            >
+              Open FD at {selectedBank.bank} <ExternalLink size={11} />
+            </a>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -118,14 +136,12 @@ export function FixedDeposits() {
               <tr className="text-left text-xs text-muted-foreground border-b border-border">
                 <th className="pb-2 font-semibold">Tenure</th>
                 <th className="pb-2 font-semibold text-right">Interest Rate</th>
-                <th className="pb-2 font-semibold text-right">₹1L Maturity</th>
+                <th className="pb-2 font-semibold text-right">₹1L Maturity (est.)</th>
               </tr>
             </thead>
             <tbody>
               {selectedBank.rates.map((r, i) => {
                 const rate = parseFloat(isSenior ? r.senior : r.general) / 100;
-                const tenureYears = 1;
-                const maturity = 100000 * (1 + rate);
                 return (
                   <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
                     <td className="py-2.5 text-foreground">{r.tenure}</td>
@@ -133,7 +149,7 @@ export function FixedDeposits() {
                       {isSenior ? r.senior : r.general}
                     </td>
                     <td className="py-2.5 text-right text-green-success font-semibold">
-                      ₹{Math.round(100000 * (1 + parseFloat(isSenior ? r.senior : r.general) / 100)).toLocaleString('en-IN')}*
+                      ₹{Math.round(100000 * (1 + rate)).toLocaleString('en-IN')}*
                     </td>
                   </tr>
                 );
@@ -141,7 +157,26 @@ export function FixedDeposits() {
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-muted-foreground mt-3">* Approximate maturity for ₹1 Lakh principal for tenure midpoint (simple interest estimate)</p>
+        <p className="text-xs text-muted-foreground mt-3">* Approximate maturity for ₹1 Lakh principal (simple interest estimate)</p>
+      </div>
+
+      {/* Open FD Links */}
+      <div className="glass-card p-4 border border-primary/20">
+        <p className="text-xs font-semibold text-muted-foreground mb-3">🏦 Open an FD directly with official banks:</p>
+        <div className="flex flex-wrap gap-3">
+          {FD_DATA.map(b => (
+            <a
+              key={b.bank}
+              href={b.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 hover:shadow-md"
+              style={{ background: `${b.color}18`, color: b.color, border: `1.5px solid ${b.color}40` }}
+            >
+              {b.logo} Open FD at {b.bank} <ExternalLink size={11} />
+            </a>
+          ))}
+        </div>
       </div>
 
       {/* FD Calculator */}
@@ -162,11 +197,11 @@ export function FixedDeposits() {
           ))}
         </div>
         <div className="grid grid-cols-3 gap-3">
-          <motion.div key={calc.principal} initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="rounded-xl p-3 text-center" style={{ background: "hsl(var(--muted))" }}>
+          <motion.div key={calc.principal} initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="rounded-xl p-3 text-center bg-muted">
             <p className="text-xs text-muted-foreground">Principal</p>
             <p className="text-base font-black text-foreground">₹{calc.principal.toLocaleString('en-IN')}</p>
           </motion.div>
-          <motion.div key={interestEarned} initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="rounded-xl p-3 text-center" style={{ background: "hsl(var(--muted))" }}>
+          <motion.div key={interestEarned} initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="rounded-xl p-3 text-center bg-muted">
             <p className="text-xs text-muted-foreground">Interest Earned</p>
             <p className="text-base font-black text-green-success">₹{Math.round(interestEarned).toLocaleString('en-IN')}</p>
           </motion.div>
