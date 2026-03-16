@@ -285,7 +285,7 @@ function GoalCard({ goal, userData, index, expanded, onExpand, onDelete }: GoalC
           </div>
           <div className="text-center">
             <p className="text-[10px] text-muted-foreground">Saved</p>
-            <p className="text-xs font-bold text-green-500">{formatINR(goal.savedAmount)}</p>
+            <p className="text-xs font-bold text-green-success">{formatINR(goal.savedAmount)}</p>
           </div>
           <div className="text-center">
             <p className="text-[10px] text-muted-foreground">Remaining</p>
