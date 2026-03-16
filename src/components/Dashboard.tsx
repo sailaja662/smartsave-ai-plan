@@ -8,11 +8,13 @@ import { BankOptions } from "@/components/BankOptions";
 import { GoalsAndTips } from "@/components/GoalsAndTips";
 import { AIChatbot } from "@/components/AIChatbot";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Sparkles, LogOut, LayoutDashboard, TrendingUp, Building2, Target } from "lucide-react";
+import { MarketData } from "@/components/MarketData";
+import { Sparkles, LogOut, LayoutDashboard, TrendingUp, Building2, Target, BarChart2 } from "lucide-react";
 
 const TABS = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "invest", label: "AI Advisor", icon: TrendingUp },
+  { id: "markets", label: "Markets", icon: BarChart2 },
   { id: "banks", label: "Banks", icon: Building2 },
   { id: "goals", label: "Goals & Tips", icon: Target },
 ];
@@ -97,6 +99,7 @@ export function Dashboard({ userData, onLogout }: Props) {
             </>
           )}
           {activeTab === "invest" && <AIInvestmentAdvisor userData={userData} />}
+          {activeTab === "markets" && <MarketData userData={userData} />}
           {activeTab === "banks" && <BankOptions />}
           {activeTab === "goals" && <GoalsAndTips userData={userData} />}
         </motion.div>
