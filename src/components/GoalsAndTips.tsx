@@ -452,7 +452,7 @@ function SIPCalculator() {
         </div>
         <div className="text-center">
           <p className="text-xs text-muted-foreground">Gains</p>
-          <p className="text-sm font-bold text-green-500">{formatINR(gain)}</p>
+          <p className="text-sm font-bold text-green-success">{formatINR(gain)}</p>
         </div>
         <div className="text-center">
           <p className="text-xs text-muted-foreground">Maturity</p>
