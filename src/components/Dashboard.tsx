@@ -99,6 +99,7 @@ export function Dashboard({ userData, onLogout }: Props) {
             </>
           )}
           {activeTab === "invest" && <AIInvestmentAdvisor userData={userData} />}
+          {activeTab === "markets" && <MarketData userData={userData} />}
           {activeTab === "banks" && <BankOptions />}
           {activeTab === "goals" && <GoalsAndTips userData={userData} />}
         </motion.div>
