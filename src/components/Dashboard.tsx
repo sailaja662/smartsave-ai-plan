@@ -4,19 +4,19 @@ import { UserData } from "@/types/finance";
 import { FinancialSummary } from "@/components/FinancialSummary";
 import { AIInvestmentAdvisor } from "@/components/AIInvestmentAdvisor";
 import { ChartsSection } from "@/components/ChartsSection";
-import { BankOptions } from "@/components/BankOptions";
 import { GoalsAndTips } from "@/components/GoalsAndTips";
 import { AIChatbot } from "@/components/AIChatbot";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MarketData } from "@/components/MarketData";
-import { Sparkles, LogOut, LayoutDashboard, TrendingUp, Building2, Target, BarChart2 } from "lucide-react";
+import { FeedbackPage } from "@/components/FeedbackPage";
+import { Sparkles, LogOut, LayoutDashboard, TrendingUp, Target, BarChart2, MessageSquareHeart } from "lucide-react";
 
 const TABS = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "invest", label: "AI Advisor", icon: TrendingUp },
   { id: "markets", label: "Markets", icon: BarChart2 },
-  { id: "banks", label: "Banks", icon: Building2 },
   { id: "goals", label: "Goals & Tips", icon: Target },
+  { id: "feedback", label: "Feedback", icon: MessageSquareHeart },
 ];
 
 interface Props {
@@ -100,8 +100,8 @@ export function Dashboard({ userData, onLogout }: Props) {
           )}
           {activeTab === "invest" && <AIInvestmentAdvisor userData={userData} />}
           {activeTab === "markets" && <MarketData userData={userData} />}
-          {activeTab === "banks" && <BankOptions />}
           {activeTab === "goals" && <GoalsAndTips userData={userData} />}
+          {activeTab === "feedback" && <FeedbackPage userData={userData} />}
         </motion.div>
       </main>
 
