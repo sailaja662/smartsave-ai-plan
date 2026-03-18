@@ -9,6 +9,25 @@ const EMAILJS_SERVICE_ID = "service_123456";
 const EMAILJS_TEMPLATE_ID = "template_qcmanlx";
 const EMAILJS_PUBLIC_KEY = "OWQa4kYXSOEY6otok";
 
+// Defined OUTSIDE the component so it is never recreated on re-render
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-sm font-semibold text-foreground">{label}</label>
+      {children}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+    </div>
+  );
+}
+
 interface Props {
   userData: UserData;
 }
