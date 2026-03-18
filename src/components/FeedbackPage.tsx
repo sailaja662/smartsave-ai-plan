@@ -5,9 +5,9 @@ import { MessageSquareHeart, Star, Send, CheckCircle2, XCircle, Loader2 } from "
 import { UserData } from "@/types/finance";
 
 // EmailJS public configuration – replace with your own IDs from emailjs.com
-const EMAILJS_SERVICE_ID = "service_smartsave";
-const EMAILJS_TEMPLATE_ID = "template_feedback";
-const EMAILJS_PUBLIC_KEY = "YOUR_EMAILJS_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = "service_123456";
+const EMAILJS_TEMPLATE_ID = "template_qcmanlx";
+const EMAILJS_PUBLIC_KEY = "OWQa4kYXSOEY6otok";
 
 interface Props {
   userData: UserData;
