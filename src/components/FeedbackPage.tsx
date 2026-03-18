@@ -82,22 +82,6 @@ export function FeedbackPage({ userData }: Props) {
     }
   };
 
-  const Field = ({
-    label,
-    error,
-    children,
-  }: {
-    label: string;
-    error?: string;
-    children: React.ReactNode;
-  }) => (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-semibold text-foreground">{label}</label>
-      {children}
-      {error && <p className="text-xs text-red-danger">{error}</p>}
-    </div>
-  );
-
   return (
     <section className="flex flex-col items-center gap-6 py-4">
       {/* Header */}
